@@ -10,20 +10,20 @@ class HashSet
   end
 
   def insert(key)
+    return false if include?(key)
     resize! if @num_buckets == @count
-    value = key.hash
-    self[value % num_buckets] << value
-    @count+=1
+    self[key.hash % num_buckets] << key
+    @count += 1
+    key
   end
 
   def include?(key)
-    value = key.hash
-    self[value % num_buckets].include?(value)
+    self[key.hash % num_buckets].include?(key)
   end
 
   def remove(key)
-    value = key.hash
-    self[value % num_buckets].delete(value)
+    return nil unless include?(key)
+    self[key.hash % num_buckets].delete(key)
     @count -= 1
   end
 
@@ -31,7 +31,7 @@ class HashSet
 
   def [](num)
     # optional but useful; return the bucket corresponding to `num`
-    @store[num]
+    @store[num % num_buckets]
   end
 
   def num_buckets
@@ -41,8 +41,8 @@ class HashSet
   def resize!
     @num_buckets.times {@store << []}
     @store.each do |bucket|
-      bucket.each do |num|
-        @store[num % num_buckets] << bucket.delete(num)
+      bucket.each do |key|
+        @store[key.hash % num_buckets] << bucket.delete(key)
       end
     end
   end

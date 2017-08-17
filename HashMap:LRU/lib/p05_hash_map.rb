@@ -10,18 +10,35 @@ class HashMap
   end
 
   def include?(key)
+    @store[bucket(key)].include?(key)
   end
 
-  def set(key, val)
+  def set(key, val) #[]=      : set alias
+    if @store[bucket(key)].include?(key)
+      @store[bucket(key)].update(key, val)
+    else
+      @count+=1
+      @store[bucket(key)].append(key, val)
+    end
   end
 
-  def get(key)
+  def get(key) #[]   :  get alias
+    @store[bucket(key)].get(key)
   end
 
   def delete(key)
+    @count-=1
+    @store[bucket(key)].remove(key)
   end
 
-  def each
+  def each(&prc)
+    result = []
+    @store.each do |linkedlist|
+      linkedlist.each do |link|
+        result << prc.call(link.key, link.val)
+      end
+    end
+    result
   end
 
   # uncomment when you have Enumerable included
@@ -42,9 +59,17 @@ class HashMap
   end
 
   def resize!
-  end
+    old_store = @store
+    @store = Array.new(num_buckets * 2) { LinkedList.new }
+    @count = 0
+
+    old_store.each do |bucket|
+      bucket.each { |link| set(link.key, link.val) }
+    end
+      end
 
   def bucket(key)
     # optional but useful; return the bucket corresponding to `key`
+    key.hash % num_buckets
   end
 end

@@ -28,10 +28,9 @@ class Hash
   # This returns 0 because rspec will break if it returns nil
   # Make sure to implement an actual Hash#hash method
   def hash
-    return {}.hash if self == {}
     hash = 0
     self.each do |k,v|
-      hash += k.to_s.chars.hash * v.to_s.chars.hash
+        hash += k.to_s.chars.hash * v.to_s.chars.hash
     end
     hash
   end
