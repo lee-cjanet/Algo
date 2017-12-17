@@ -107,6 +107,8 @@ class DynamicProgramming
     (1..weight_length).each do |i|
       weight_values[i] = [weights[i - 1], values[i - 1]]
     end
+    
+    p weight_values
     table = Array.new(weight_length + 1) { Array.new(capacity + 1)}
     table[0].each_index do |idx|
       table[0][idx] = 0
