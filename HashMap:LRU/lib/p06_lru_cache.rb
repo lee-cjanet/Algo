@@ -4,10 +4,10 @@ require_relative 'p04_linked_list'
 class LRUCache
   attr_reader :count
   def initialize(max, prc)
-    @map = HashMap.new
-    @store = LinkedList.new
-    @max = max
+    @max = max #never changes
     @prc = prc
+    @map = HashMap.new(max)
+    @store = LinkedList.new
   end
 
   def count
@@ -15,8 +15,7 @@ class LRUCache
   end
 
   def get(key)
-
-
+    @map[key]
   end
 
   def to_s
@@ -31,10 +30,10 @@ class LRUCache
 
   def update_node!(node)
     # suggested helper method; move a node to the end of the list
-    node.remove
-    @map[node.key] = @store.append(node.key, node.val)
+
   end
 
   def eject!
+
   end
 end
